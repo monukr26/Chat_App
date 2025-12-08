@@ -40,6 +40,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -105,23 +106,32 @@ fun MessageList(modifier: Modifier = Modifier, messageList: List<MessageModel>){
 @Composable
 fun MessageRow ( messageModel: MessageModel ) {
     val isModel = messageModel.role=="model"
-    val bubbleColor = if (isModel) Color(0xFFE0F2F1) else Color(0xFFEDE7F6)
-    val horizontalArrangement = if (isModel) Arrangement.Start else Arrangement.End
+    val bubbleColor = if (isModel) Color(0xFFF8F8F8) else Color(0xFFE3F2FD)
+
 
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 8.dp),
-        horizontalArrangement = horizontalArrangement,
-        verticalAlignment = Alignment.CenterVertically
+            .padding(horizontal = 8.dp, vertical = 4.dp),
+        horizontalArrangement = if (isModel) Arrangement.Start else Arrangement.End,
+        verticalAlignment = Alignment.Top
     ) {
         Box(
             modifier = Modifier
+                .then(
+                    if (isModel) {
+                        // Model message: full width
+                        Modifier.fillMaxWidth(1f)
+                    } else {
+                        // User message: limited width
+                        Modifier.widthIn(max = 280.dp)
+                    }
+                )
                 .padding(vertical = 6.dp)
-                .clip(MaterialTheme.shapes.medium)
+                .clip(RoundedCornerShape(12.dp))
                 .background(bubbleColor)
                 .padding(12.dp)
-                .widthIn(max = 280.dp) // avoid very wide bubbles on large screens
+
         ) {
             SelectionContainer {
                 Text(
@@ -151,7 +161,7 @@ fun MessageInput (onMessageSend : (String) -> Unit) {
             modifier = Modifier.weight(1f),
             value = message,
             onValueChange = { message = it },
-            placeholder = { Text("Type a message...") },
+            placeholder = { Text("Type your message..") },
             maxLines = 4,
             singleLine = false
         )
@@ -180,14 +190,15 @@ fun MessageInput (onMessageSend : (String) -> Unit) {
 fun AppHeader () {
     Box (modifier = Modifier
         .fillMaxWidth()
-        .background(MaterialTheme.colorScheme.primary)
         .padding(vertical = 32.dp)
     ) {
         Text(
             modifier = Modifier.align(Alignment.Center),
             text = "KeepChat",
-            color = Color.White,
-            fontSize = 20.sp
+            color = Color.Black,
+            fontFamily = FontFamily.Cursive,
+            fontSize = 36.sp
+
         )
 
 

@@ -1,8 +1,11 @@
+import java.io.FileInputStream
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
 }
-val apikey = project.findProperty("API_KEY") as? String ?: ""
+
 android {
     namespace = "com.example.keepchatapp"
 
@@ -19,12 +22,19 @@ android {
         versionCode = 1
         versionName = "1.0"
 
-        buildConfigField("String", "API_KEY", "\"$apikey\"")
+
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
             useSupportLibrary = true
         }
+
+        val properties = Properties()
+        val localPropertiesFile = rootProject.file("local.properties")
+        if (localPropertiesFile.exists()) {
+            properties.load(FileInputStream(localPropertiesFile))
+        }
+        buildConfigField("String", "API_KEY", "\"${properties.getProperty("API_KEY", "")}\"")
     }
 
     buildTypes {

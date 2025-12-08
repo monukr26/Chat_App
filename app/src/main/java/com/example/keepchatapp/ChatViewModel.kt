@@ -6,7 +6,6 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.google.ai.client.generativeai.BuildConfig
 import com.google.ai.client.generativeai.GenerativeModel
 import com.google.ai.client.generativeai.type.content
 import kotlinx.coroutines.launch
@@ -16,8 +15,8 @@ class ChatViewModel : ViewModel(){
     val messageList: SnapshotStateList<MessageModel> = mutableStateListOf()
 
     private val generativeModel : GenerativeModel = GenerativeModel(
-        modelName = "gemini-2.5-flash",
-        apiKey = Constants.apiKey
+        modelName = "gemini-2.5-flash-lite",
+        apiKey = BuildConfig.API_KEY
     )
 
     @RequiresApi(35)
@@ -47,6 +46,8 @@ class ChatViewModel : ViewModel(){
                 // Add the model's response
                 response.text?.let { modelResponse ->
                     messageList.add(MessageModel(modelResponse, "model"))
+                } ?: run {
+                    messageList.add(MessageModel("No response received", "model"))
                 }
             }
             catch (e : Exception){

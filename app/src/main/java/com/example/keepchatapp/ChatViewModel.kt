@@ -6,6 +6,7 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.ai.client.generativeai.BuildConfig
 import com.google.ai.client.generativeai.GenerativeModel
 import com.google.ai.client.generativeai.type.content
 import kotlinx.coroutines.launch
@@ -14,7 +15,7 @@ class ChatViewModel : ViewModel(){
 
     val messageList: SnapshotStateList<MessageModel> = mutableStateListOf()
 
-    val generativeModel : GenerativeModel = GenerativeModel(
+    private val generativeModel : GenerativeModel = GenerativeModel(
         modelName = "gemini-2.5-flash",
         apiKey = Constants.apiKey
     )

@@ -3,7 +3,6 @@ package com.example.keepchatapp
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -12,6 +11,8 @@ import androidx.navigation.compose.composable
 sealed class AppScreen (val route : String) {
     object Splash : AppScreen("splash")
     object Chat : AppScreen("chat")
+    object Login : AppScreen("login")
+    object SignUp : AppScreen("signup")
 }
 
 
@@ -22,10 +23,20 @@ fun AppNavigation( navController: NavHostController) {
         composable(AppScreen.Splash.route) {
             SplashScreen(navController)
         }
+        composable(AppScreen.Login.route) {
+            LoginScreen(navController, viewModel()
+            )
+        }
+        composable(AppScreen.SignUp.route) {
+            SignUpScreen(navController, viewModel())
+        }
         composable(AppScreen.Chat.route) {
             val chatViewModel: ChatViewModel = viewModel()
-            ChatPage(modifier = Modifier,
-                viewModel = chatViewModel)
+            ChatPage(
+                navController = navController,
+                viewModel = chatViewModel,
+                authModel = viewModel()
+            )
 
         }
 

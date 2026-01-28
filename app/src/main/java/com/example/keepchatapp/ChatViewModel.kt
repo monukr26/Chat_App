@@ -30,7 +30,7 @@ class ChatViewModel : ViewModel(){
 
             try {
                 val history = messageList
-                    .dropLast(2)  // Remove current question and "Loading..."
+                    .dropLast(2)
                     .map {
                         content(role = it.role) {
                             text(it.message)
@@ -40,10 +40,8 @@ class ChatViewModel : ViewModel(){
                 val chat = generativeModel.startChat(history=history)
                 val response = chat.sendMessage(question)
 
-                // Remove the "Loading..." message
                 messageList.removeLast()
 
-                // Add the model's response
                 response.text?.let { modelResponse ->
                     messageList.add(MessageModel(modelResponse, "model"))
                 } ?: run {

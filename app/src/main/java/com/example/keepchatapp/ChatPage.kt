@@ -1,10 +1,7 @@
 package com.example.keepchatapp
 
 import androidx.annotation.RequiresApi
-import androidx.benchmark.perfetto.Row
 import androidx.compose.foundation.layout.Row
-
-
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -20,18 +17,23 @@ import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Send
+import androidx.compose.material3.CenterAlignedTopAppBar
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -39,28 +41,68 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.keepchatapp.ui.theme.Pink80
+import androidx.navigation.NavController
 
+
+@OptIn(ExperimentalMaterial3Api::class)
 @RequiresApi(35)
 @Composable
-fun ChatPage ( modifier: Modifier = Modifier, viewModel: ChatViewModel){
-    Column (modifier = modifier.fillMaxSize()){
-        AppHeader()
+fun ChatPage ( modifier: Modifier = Modifier,navController: NavController, viewModel: ChatViewModel, authModel: AuthViewModel){
+
+    val authState = authModel.authState.observeAsState()
+
+    LaunchedEffect(authState.value) {
+        when(authState.value){
+            is AuthState.Unauthenticated -> {
+                navController.navigate("login")
+            }
+            else -> Unit
+        }
+    }
+    Scaffold (
+        topBar = {
+            CenterAlignedTopAppBar(
+                modifier = Modifier.padding(8.dp),
+                title = {
+                    Text(
+                        text = "KeepChat",
+                        color = Color.Black,
+                        fontSize = 24.sp,
+                        fontFamily = FontFamily.Cursive
+                    )
+                },
+
+                navigationIcon = {
+                    IconButton(onClick = {},
+                        modifier = Modifier
+                            .background(Color(0x229DCFF1), CircleShape)) {
+                        Icon(
+                            imageVector = Icons.Default.Person,
+                            contentDescription = "Profile",
+                            modifier = Modifier.size(24.dp)
+                        )
+
+                    }
+                }
+            )
+        },
+        bottomBar = {
+            MessageInput(onMessageSend = {
+                viewModel.sendMessage(it)
+            })
+        }
+    ) { padding ->
+
+
+    Column (modifier = modifier.fillMaxSize().padding(padding)){
         MessageList(modifier = Modifier.weight(1f),
             messageList = viewModel.messageList
         )
-
-        MessageInput(onMessageSend = {
-            viewModel.sendMessage(it)
-
-        })
-
-    }
+    }}
 
 }
 
@@ -154,7 +196,7 @@ fun MessageInput (onMessageSend : (String) -> Unit) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(22.dp),
+            .padding(start = 16.dp, end = 12.dp, bottom = 48.dp),
         verticalAlignment = Alignment.CenterVertically
     ){
         OutlinedTextField(
@@ -185,26 +227,6 @@ fun MessageInput (onMessageSend : (String) -> Unit) {
     }
 }
 
-
-@Composable
-fun AppHeader () {
-    Box (modifier = Modifier
-        .fillMaxWidth()
-        .padding(vertical = 32.dp)
-    ) {
-        Text(
-            modifier = Modifier.align(Alignment.Center),
-            text = "KeepChat",
-            color = Color.Black,
-            fontFamily = FontFamily.Cursive,
-            fontSize = 36.sp
-
-        )
-
-
-    }
-
-}
 
 
 

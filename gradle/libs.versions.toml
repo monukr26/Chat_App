@@ -1,7 +1,8 @@
 [versions]
 agp = "8.7.3"  # Updated
 generativeai = "0.9.0"
-kotlin = "1.9.25"  # Updated to match Compose Compiler
+kotlin = "2.1.0"
+
 coreKtx = "1.13.0"
 junit = "4.13.2"
 junitVersion = "1.2.1"
@@ -11,9 +12,12 @@ activityCompose = "1.10.1"
 composeBom = "2024.12.01"  # Updated to latest stable
 benchmarkMacro = "1.3.4"
 navigationRuntimeAndroid = "2.9.6"
-navigationCompose = "2.8.5"  # Add this for navigation-compose
+navigationCompose = "2.8.5"
+googleGmsGoogleServices = "4.4.4"
+firebaseAuth = "24.0.1"  # Add this for navigation-compose
 
 [libraries]
+
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 generativeai = { module = "com.google.ai.client.generativeai:generativeai", version.ref = "generativeai" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
@@ -31,8 +35,11 @@ androidx-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit
 androidx-material3 = { group = "androidx.compose.material3", name = "material3" }
 androidx-benchmark-macro = { group = "androidx.benchmark", name = "benchmark-macro", version.ref = "benchmarkMacro" }
 androidx-navigation-runtime-android = { group = "androidx.navigation", name = "navigation-runtime-android", version.ref = "navigationRuntimeAndroid" }
-androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigationCompose" }  # Add this
+androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigationCompose" }
+firebase-auth = { group = "com.google.firebase", name = "firebase-auth", version.ref = "firebaseAuth" }  # Add this
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+google-gms-google-services = { id = "com.google.gms.google-services", version.ref = "googleGmsGoogleServices" }
+kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }

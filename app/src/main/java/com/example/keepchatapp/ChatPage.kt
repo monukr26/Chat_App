@@ -221,9 +221,7 @@ fun MessageInput (onMessageSend : (String) -> Unit) {
                 imageVector = Icons.Default.Send,
                 contentDescription = "Send"
             )
-
         }
-
     }
 }
 
